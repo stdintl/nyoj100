@@ -7,6 +7,8 @@ D_i（严格递增，且 0 < D_i < L）。薇尔莉特可以从起点出发，�
 接下来 N 行，每行一个整数 D_i，表示第 i 个路标与起点的距离。
 数据范围：1 ≤ L ≤ 1e9，0 ≤ M ≤ N ≤ 50000，0 < D_i < L，且 D_i 严格递增。*/
 
+//反向思维:直接给出最小距离,再验证是否可行;
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -16,19 +18,40 @@ int main () {
 
     int l, m, n;
     cin >> l >> n >> m;
-    vector <int> num(n+2);
-    for (int i=1; i<=n; i++) 
-        cin >> num[i];
-    num[n+1] = l;    
-    int diff = l;
-    int count = 0;
-    while (1) {
-        for (int i=1; i<=n+1; i++) {
-            if (num[i]-num[i-1] > diff)
-                count ++;
-            if (count > m)
-                break;
+    vector <int> num(1);
+    for (int i=1; i<=n; i++) {
+        int temp;
+        cin >> temp;
+        num.push_back(temp);
+    }  
+    num.push_back(l);
+
+    //二分:根据具体情境确定边界条件;
+    int ans;
+    int left = 0, right = l, mid;
+    while (left <= right) {
+        int count = 0;       
+        mid = (left + right) / 2;
+        int temp = 0;
+        for (int i=1; i<=n+1; i++) {   
+            if (num[i] - temp < mid) {
+                count ++;           
+            }
+            else {
+                temp = num[i];
+            }
+    
+        }      
+        if (count <= m) {
+            left = mid + 1;
+            ans = mid;
         }
-        int te
+        else 
+            right = mid - 1;
     }
+
+
+    cout << ans << '\n';
+
+    return 0;
 }
